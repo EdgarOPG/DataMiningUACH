@@ -10,6 +10,11 @@ from sklearn.feature_selection import SelectKBest
 from sklearn.feature_selection import chi2
 from sklearn.tree import DecisionTreeClassifier
 
+dict = {'unacc' : 1,
+        'acc' : 2,
+        'good': 3,
+        'vgood': 4}
+
 def open_file(fileName):
     data = pd.read_csv(fileName)
     return data
@@ -62,7 +67,7 @@ def attribute_subset_selection_with_trees(data):
     print('Targets:\n\n' + str(Y[:10]))
 
     # Model declaration
-    extra_tree = DecisionTreesClassifier()
+    extra_tree = DecisionTreeClassifier()
 
     # Model training
     extra_tree.fit(X, Y)
@@ -157,6 +162,7 @@ if __name__ == '__main__':
     # principal_components_analysis(2)
     # principal_components_analysis(.93)
     data = open_file('train.csv')
+    data['class'] = data['class'].replace(dict)
     #print(data[list(range(0,5))])
     attribute_subset_selection_with_trees(data)
 
