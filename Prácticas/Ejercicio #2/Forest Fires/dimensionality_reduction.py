@@ -1,9 +1,6 @@
-"""
-Author: Normando Ali Zubia Hernández
-This file is created to explain the use of dimensionality reduction
-with different tools in sklearn library.
-Every function contained in this file belongs to a different tool.
-"""
+import pandas as pd
+import numpy
+
 from sklearn import datasets
 from sklearn.decomposition import PCA
 from sklearn.ensemble import ExtraTreesClassifier
@@ -12,9 +9,35 @@ from sklearn.feature_selection import RFE
 from sklearn.linear_model import LogisticRegression
 from sklearn.feature_selection import SelectKBest
 from sklearn.feature_selection import chi2
+from sklearn.tree import DecisionTreeClassifier
 
-import pandas as pd
-import numpy
+dictDays = {
+        'mon' : 1,
+        'tue' : 2,
+        'wed': 3,
+        'thu': 4,
+        'fri': 5,
+        'sat': 6,
+        'sun': 7
+        }
+
+dictMonths = {
+        'jan' : 1,
+        'feb' : 2,
+        'mar' : 3,
+        'apr' : 4,
+        'may' : 5,
+        'jun' : 6,
+        'jul' : 7,
+        'aug' : 8,
+        'sep' : 9,
+        'oct' : 10,
+        'nov' : 11,
+        'dec' : 12 }
+
+def open_file(fileName):
+    data = pd.read_csv(fileName)
+    return data
 
 def get_feacture_subset(data, *args):
     featureDic = []
@@ -63,8 +86,8 @@ def principal_components_analysis(n_components):
 
 def attribute_subset_selection_with_trees(data):
     # import data
-    X = get_feacture_subset(data,'buying','maint','doors','persons','lug_boot','safety')
-    Y = data['class']
+    X = get_feacture_subset(data, 'X', 'Y', 'day','FFMC','DMC','DC','ISI','temp','RH','wind','rain','area')
+    Y = data['month']
 
     # First 10 rows
     print('Training Data:\n\n' + str(X[:10]))
@@ -72,7 +95,7 @@ def attribute_subset_selection_with_trees(data):
     print('Targets:\n\n' + str(Y[:10]))
 
     # Model declaration
-    extra_tree = ExtraTreesClassifier()
+    extra_tree = DecisionTreeClassifier()
 
     # Model training
     extra_tree.fit(X, Y)
@@ -106,10 +129,10 @@ def recursive_feature_elimination(n_atributes):
     print('Targets:\n\n' + str(Y[:10]))
 
     # Create a base classifier used to evaluate a subset of attributes
-    model_eval = ExtraTreesClassifier()
+    # model_eval = ExtraTreesClassifier()
 
     # Note: Feature selection change with different models
-    # model_eval = LogisticRegression()
+    model_eval = LogisticRegression()
 
     # Create the RFE model and select 3 attributes
     rfe = RFE(model_eval, n_atributes)
@@ -162,32 +185,16 @@ def select_k_best_features(n_atributes):
     print('\nNew feature vector:\n')
     print(new_feature_vector[:10])
 
-def convert_data_to_numeric(data):
-    numpy_data = data.values
-
-    for i in range(len(numpy_data[0])):
-        temp = numpy_data[:,i]
-        dict = numpy.unique(numpy_data[:,i])
-        # print(dict)
-        for j in range(len(dict)):
-            # print(numpy.where(numpy_data[:,i] == dict[j]))
-            temp[numpy.where(numpy_data[:,i] == dict[j])] = j
-
-        numpy_data[:,i] = temp
-
-    return numpy_data
-
 
 if __name__ == '__main__':
     # principal_components_analysis(2)
-    # principal_components_analysis(.90)
+    # principal_components_analysis(.93)
+    data = open_file('train.csv')
+    data['month'] = data['month'].replace(dictMonths)
+    data['day'] = data['day'].replace(dictDays)
+    #print(data[list(range(0,5))])
+    attribute_subset_selection_with_trees(data)
+
     # recursive_feature_elimination(2)
 
-    # select_k_best_features(2)
-
-    data = pd.read_csv('train.csv')
-    data = convert_data_to_numeric(data)
-    print(data[1    ])
-
-    #attribute_subset_selection_with_trees(data)
-    #print(data.describe)
+    #select_k_best_features(2)

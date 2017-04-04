@@ -1,4 +1,5 @@
 import pandas as pd
+import numpy
 
 from sklearn import datasets
 from sklearn.decomposition import PCA
@@ -10,39 +11,22 @@ from sklearn.feature_selection import SelectKBest
 from sklearn.feature_selection import chi2
 from sklearn.tree import DecisionTreeClassifier
 
-dictDays = {
-        'mon' : 1,
-        'tue' : 2,
-        'wed': 3,
-        'thu': 4,
-        'fri': 5,
-        'sat': 6,
-        'sun': 7
-        }
-
-dictMonths = {
-        'jan' : 1,
-        'feb' : 2,
-        'mar' : 3,
-        'apr' : 4,
-        'may' : 5,
-        'jun' : 6,
-        'jul' : 7,
-        'aug' : 8,
-        'sep' : 9,
-        'oct' : 10,
-        'nov' : 11,
-        'dec' : 12 }
-
 def open_file(fileName):
     data = pd.read_csv(fileName)
     return data
 
-def principal_components_analysis(n_components):
+def get_feacture_subset(data, *args):
+    featureDic = []
+    for arg in args:
+        featureDic.append(arg)
+
+    subset = data[featureDic]
+    return subset
+
+def principal_components_analysis(data,n_components):
     # import data
-    iris = datasets.load_iris()
-    X = iris.data
-    Y = iris.target
+    X = data[list(range(0,9))]
+    Y = data[[10]]
 
     # First 10 rows
     print('Training Data:\n\n' + str(X[:10]))
@@ -77,8 +61,8 @@ def principal_components_analysis(n_components):
 
 def attribute_subset_selection_with_trees(data):
     # import data
-    X = data[list(range(0,5))]
-    Y = data[[6]]
+    X = data[list(range(0,9))]
+    Y = data[[10]]
 
     # First 10 rows
     print('Training Data:\n\n' + str(X[:10]))
@@ -181,11 +165,10 @@ if __name__ == '__main__':
     # principal_components_analysis(2)
     # principal_components_analysis(.93)
     data = open_file('train.csv')
-    data['month'] = data['month'].replace(dictMonths)
-    data['day'] = data['day'].replace(dictDays)
     #print(data[list(range(0,5))])
+    data['bare-nuclei'] = data['bare-nuclei'].replace('?',data['bare-nuclei'].mode()[0])
     attribute_subset_selection_with_trees(data)
-
+    principal_components_analysis(data, 2)
     # recursive_feature_elimination(2)
 
     #select_k_best_features(2)
