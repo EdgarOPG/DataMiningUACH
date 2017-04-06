@@ -71,6 +71,7 @@ def convert_data_to_numeric(data):
 
     return numpy_data
 
+
 if __name__ == '__main__':
     # principal_components_analysis(2)
     # principal_components_analysis(.90)
@@ -78,7 +79,7 @@ if __name__ == '__main__':
 
     # select_k_best_features(2)
 
-    data = pd.read_csv('train.csv')
+    data = pd.read_json('train.json')
     data = convert_data_to_numeric(data)
     attribute_subset_selection_with_trees(data)
     #print(data)

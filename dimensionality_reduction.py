@@ -63,13 +63,13 @@ def principal_components_analysis(n_components):
 
 def attribute_subset_selection_with_trees(data):
     # import data
-    X = get_feacture_subset(data,'buying','maint','doors','persons','lug_boot','safety')
-    Y = data['class']
+    X = data[:,0:5]
+    Y = numpy.asarray(data[:,6], dtype="int16")
 
     # First 10 rows
-    print('Training Data:\n\n' + str(X[:10]))
+    print('Training Data:\n\n' + str(X[:20]))
     print('\n')
-    print('Targets:\n\n' + str(Y[:10]))
+    print('Targets:\n\n' + str(Y[:20]))
 
     # Model declaration
     extra_tree = ExtraTreesClassifier()
@@ -187,7 +187,7 @@ if __name__ == '__main__':
 
     data = pd.read_csv('train.csv')
     data = convert_data_to_numeric(data)
-    print(data[1    ])
+    attribute_subset_selection_with_trees(data)
+    #print(data)
 
-    #attribute_subset_selection_with_trees(data)
     #print(data.describe)
