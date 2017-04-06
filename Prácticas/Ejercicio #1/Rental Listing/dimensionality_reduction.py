@@ -26,7 +26,7 @@ def get_feacture_subset(data, *args):
 
 def attribute_subset_selection_with_trees(data):
     # import data
-    X = data[:,0:-1]
+    X = data[:,0:-2]
     Y = numpy.asarray(data[:,-1], dtype="int16")
 
     # First 10 rows
@@ -80,8 +80,10 @@ if __name__ == '__main__':
     # select_k_best_features(2)
 
     data = pd.read_json('train.json')
-    data = convert_data_to_numeric(data)
-    attribute_subset_selection_with_trees(data)
+    data = get_feacture_subset(data,'bathrooms','bedrooms','latitude','longitude','price','interest_level')
+    print(data)
+    #data = convert_data_to_numeric(data)
+    #attribute_subset_selection_with_trees(data)
     #print(data)
 
     #print(data.describe)

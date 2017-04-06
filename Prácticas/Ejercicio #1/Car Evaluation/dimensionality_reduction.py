@@ -26,7 +26,7 @@ def get_feacture_subset(data, *args):
 
 def attribute_subset_selection_with_trees(data):
     # import data
-    X = data[:,0:-1]
+    X = data[:,0:-2]
     Y = numpy.asarray(data[:,-1], dtype="int16")
 
     # First 10 rows
@@ -70,6 +70,7 @@ def convert_data_to_numeric(data):
         numpy_data[:,i] = temp
 
     return numpy_data
+
 
 if __name__ == '__main__':
     # principal_components_analysis(2)
